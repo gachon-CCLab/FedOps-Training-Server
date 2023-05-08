@@ -34,14 +34,15 @@ class FL_server:
     local_epochs = 3
     batch_size = 32
     val_steps = 32
-    latest_gl_model_v = 0 # 이전 글로벌 모델 버전
-    next_gl_model_v = 0 # 생성될 글로벌 모델 버전
-    start_by_round = 0 # fit aggregation start
-    end_by_round = 0 # fit aggregation end
-    round = 0 # round 수
+    latest_gl_model_v = 0  # 이전 글로벌 모델 버전
+    next_gl_model_v = 0  # 생성될 글로벌 모델 버전
+    start_by_round = 0  # fit aggregation start
+    end_by_round = 0  # fit aggregation end
+    round = 0  # round 수
 
 
 server = FL_server()
+task_id = os.environ.get('TASK_ID')
 
 
 # 참고: https://loosie.tistory.com/210, https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
@@ -324,7 +325,7 @@ if __name__ == "__main__":
     while True:
         try:
             # server_status => FL server ready
-            r = requests.put(inform_SE+'FLSeUpdate', verify=False, data=json.dumps(inform_Payload))
+            r = requests.put(inform_SE + 'FLSeUpdate/' + task_id, verify=False, data=json.dumps(inform_Payload))
             if r.status_code == 200:
                 break
             else:
@@ -356,13 +357,13 @@ if __name__ == "__main__":
     except Exception as e:
         logging.error('error: ', e)
         data_inform = {'FLSeReady': False}
-        requests.put(inform_SE+'FLSeUpdate', data=json.dumps(data_inform))
+        requests.put(inform_SE + 'FLSeUpdate' + task_id, data=json.dumps(data_inform))
         
     finally:
         logging.info('server close')
       
         # server_status에 model 버전 수정 update request
-        res = requests.put(inform_SE + 'FLRoundFin', params={'FLSeReady': 'false'})
+        res = requests.put(inform_SE + 'FLRoundFin' + task_id, params={'FLSeReady': 'false'})
         if res.status_code == 200:
             logging.info('global model version upgrade')
             # logging.info('global model version: ', res.json()['Server_Status']['GL_Model_V'])
