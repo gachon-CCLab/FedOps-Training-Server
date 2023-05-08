@@ -307,11 +307,10 @@ if __name__ == "__main__":
     # 새로 생성되는 글로벌 모델 버전
     server.next_gl_model_v = server.latest_gl_model_v + 1
 
-
     # server_status 주소
     # 학교 내부에서 외부 ip 접근 안됨 => ccljhub.gachon.ac.kr 접근 X
-    # kubernetes 내부 ip로 접근해야 함 => LoadBalncer일 경우 Service External IP로 설정
-    inform_SE: str = 'http://10.152.183.2:8000/FLSe/'
+    # kubernetes 내부 ip로 접근해야 함 => LoadBalancer일 경우 Service External IP로 설정
+    inform_SE: str = 'http://10.152.183.97:8000/FLSe/'
 
     inform_Payload = {
             # 형식
@@ -334,7 +333,6 @@ if __name__ == "__main__":
             logging.error("Connection refused by the server..")
             time.sleep(5)
             continue
-    
 
     try:
         fl_start_time = time.time()
@@ -354,7 +352,6 @@ if __name__ == "__main__":
         # upload global model
         # upload_model_to_bucket("gl_model_%s_V.h5" %server.next_gl_model_v)
 
-        
         # server_status error
     except Exception as e:
         logging.error('error: ', e)
