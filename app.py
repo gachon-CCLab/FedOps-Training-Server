@@ -175,7 +175,8 @@ def fl_server_start(model):
 
     # Start Flower server (SSL-enabled) for four rounds of federated learning
     fl.server.start_server(
-        server_address="0.0.0.0:8080",
+        # server_address="0.0.0.0:8080",
+        server_address="0.0.0.0:8080/fedops/server/fl-server/" + task_id,
         config=fl.server.ServerConfig(num_rounds=server.num_rounds),
         strategy=strategy,
     )
