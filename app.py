@@ -52,6 +52,7 @@ def aws_session(region_name='ap-northeast-2'):
                                 aws_secret_access_key=os.environ.get('ACCESS_SECRET_KEY'),
                                 region_name=region_name)
 
+
 # s3에 global model upload
 def upload_model_to_bucket(global_model):
     bucket_name = os.environ.get('BUCKET_NAME')
@@ -70,6 +71,7 @@ def upload_model_to_bucket(global_model):
     s3_url = f"https://{bucket_name}.s3.amazonaws.com/{global_model}"
     logging.info(f'gl_model_{server.next_gl_model_v}_V.h5 모델 업로드 완료')
     return s3_url
+
 
 # s3에 저장되어 있는 latest global model download
 def model_download():
@@ -276,7 +278,6 @@ if __name__ == "__main__":
         X_train = np.pad(X_train[:,], ((0,0),(2,2),(2,2)), 'constant')
         X_test = np.pad(X_test[:,], ((0,0),(2,2),(2,2)), 'constant')
 
-
         # 배열의 형상을 변경해서 차원 수를 3으로 설정
         # # 전이학습 모델 input값 설정시 차원을 3으로 설정해줘야 함
         X_train = tf.expand_dims(X_train, axis=3, name=None)
@@ -364,7 +365,7 @@ if __name__ == "__main__":
         logging.info('server close')
       
         # server_status에 model 버전 수정 update request
-        res = requests.put(inform_SE + 'FLRoundFin' + task_id, params={'FLSeReady': 'false'})
+        res = requests.put(inform_SE + 'FLRoundFin/' + task_id, params={'FLSeReady': 'false'})
         if res.status_code == 200:
             logging.info('global model version upgrade')
             # logging.info('global model version: ', res.json()['Server_Status']['GL_Model_V'])
