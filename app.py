@@ -359,7 +359,7 @@ if __name__ == "__main__":
     except Exception as e:
         logging.error('error: ', e)
         data_inform = {'FLSeReady': False}
-        requests.put(inform_SE + 'FLSeUpdate' + task_id, data=json.dumps(data_inform))
+        requests.put(inform_SE + 'FLSeUpdate/' + task_id, data=json.dumps(data_inform))
         
     finally:
         logging.info('server close')
